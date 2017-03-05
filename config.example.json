@@ -1,0 +1,30 @@
+{
+  "fileSize": [
+    {
+      "labels": {
+        "type": "js"
+      },
+      "args": [
+        "/path/to/your/bundle/bundle.min.js"
+      ]
+    },
+    {
+      "labels": {
+        "type": "css"
+      },
+      "args": [
+        "/path/to/your/bundle/bundle.min.css"
+      ]
+    }
+  ],
+  "fileCount": [
+    {
+      "labels": {
+        "type": "js"
+      },
+      "args": [
+        "/path/to/your/bundle/dist"
+      ]
+    }
+  ]
+}
