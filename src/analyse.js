@@ -2,7 +2,7 @@
 
 const modules = require('./modules/index');
 const formatter = require('./utils/formatter');
-const configFile = process.env.CONFIG || '../config.example.json';
+const configFile = process.env.CONFIG ? process.cwd() + '/' + process.env.CONFIG : '../config.example.json';
 
 const config = require(configFile);
 

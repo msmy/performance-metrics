@@ -2,7 +2,7 @@
 
 const gitRevSync = require('git-rev-sync');
 
-const app = require('../../package.json').name;
+const app = require(process.cwd() + '/package.json').name;
 
 const addLabels = (labels) => {
   const branch = gitRevSync.branch();
