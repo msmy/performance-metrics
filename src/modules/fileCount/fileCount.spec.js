@@ -1,7 +1,11 @@
 const fs = require('fs');
 
-const expect = require('chai').expect;
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
+
+const expect = chai.expect;
+chai.use(chaiAsPromised);
 
 const fileCount = require('./fileCount');
 
@@ -12,16 +16,16 @@ describe('fileCount', () => {
     sandbox.restore();
   });
 
-  it('should return the correct number of files in a specified folder', () => {
+  it('should resolve the correct number of files in a specified folder', () => {
     sandbox.stub(fs, 'readdirSync').returns([1,1,1,1]);
-    expect(fileCount('/valid-folder')).to.equal(4);
+    return expect(fileCount('/valid-folder')).to.eventually.equal(4);
   });
 
-  it('should return undefined if no folder is passed', () => {
-    expect(fileCount()).to.be.undefined;
+  it('should reject if no folder is passed', () => {
+    return expect(fileCount()).to.be.rejectedWith('No folder specified');
   });
 
   it('should throw an error if not a legal folder', () => {
-    expect(() => { getFileSize('a-fake-folder') }).to.throw(Error);
+    return expect(fileCount('a-fake-folder')).to.be.rejectedWith(Error);
   });
 });
