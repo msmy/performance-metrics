@@ -56,8 +56,4 @@ describe('moduleHelper', () => {
       return expect(res).to.eventually.deep.equal({ res: resVal, labels: item.labels, module: moduleName });
     });
   });
-
-  describe('runThroughModules', () => {
-
-  });
 });
