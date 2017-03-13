@@ -1,32 +1,30 @@
-"use strict";
+const flatten = require('lodash/flatten');
 
 const modules = require('./modules/index');
-const formatter = require('./utils/formatter');
+const formatter = require('./utils/formatter/formatter');
+const moduleHelper = require('./utils/moduleHelper/moduleHelper');
 const configFile = process.env.CONFIG ? process.cwd() + '/' + process.env.CONFIG : '../config.example.json';
 
 const config = require(configFile);
 
 const moduleKeys = Object.keys(modules);
 
-let result = [];
-
-Object.keys(config).forEach(k => {
+const promisesToRun = Object.keys(config).map(k => {
   const module = k;
   const moduleExists = moduleKeys.indexOf(module) > -1;
   const items = config[k];
-  // console.log('key is', k);
-  // console.log('module is', items);
+  
   if(moduleExists) {
-    items.forEach((v) => {
-      const args = v.args;
-      const labels = v.labels;
-      // console.log('args', args);
-      const res = modules[module].apply(this, args);
-      const formattedResult = formatter.toPromethesus(module, res, labels);
-
-      result.push(formattedResult);
+    return items.map((v) => {
+        return moduleHelper.callModuleWithArgs(modules[module], module, v);
     });
   }
 });
 
-process.stdout.write(result.join("\n") + "\n");
+Promise.all(flatten(promisesToRun)).then((vals) => {
+  const results = vals.map((v) => {
+    return formatter.toPromethesus(v.module, v.res, v.labels);
+  });
+  process.stdout.write(results.join("\n") + "\n");
+});
+

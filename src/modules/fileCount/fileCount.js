@@ -1,12 +1,15 @@
 const fs = require('fs');
 
 module.exports = (folder) => {
-  if (!folder) return;
+  return new Promise((resolve, reject) => {
 
-  try {
-    const files = fs.readdirSync(folder);
-    return files.length;
-  } catch (e) {
-    throw new Error(e);
-  }
+    if (!folder) reject('No folder specified');
+
+    try {
+      const files = fs.readdirSync(folder);
+      resolve(files.length);
+    } catch (e) {
+      reject(e);
+    }
+  });
 }
