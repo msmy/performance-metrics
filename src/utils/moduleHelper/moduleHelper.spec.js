@@ -7,12 +7,12 @@ const sinon = require('sinon');
 
 const modules = require('../../modules/index');
 
-const iterator = require('./iterator');
+const moduleHelper = require('./moduleHelper');
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-describe('iterator', () => {
+describe('moduleHelper', () => {
 
   let sandbox;
 
@@ -45,7 +45,7 @@ describe('iterator', () => {
       });
 
       moduleStub = sandbox.stub(modules, 'fileSize').returns(promise)
-      res = iterator.callModuleWithArgs(modules.fileSize, moduleName, item);
+      res = moduleHelper.callModuleWithArgs(modules.fileSize, moduleName, item);
     });
 
     it('should call module with correct args', () => {

@@ -7,10 +7,11 @@ const callModuleWithArgs = (fn, module, item) => {
   });
 };
 
-const runThroughModules = () => {
+const runThroughModules = (modules, items) => {
 
 };
 
 module.exports = {
-  callModuleWithArgs
+  callModuleWithArgs,
+  runThroughModules
 };
