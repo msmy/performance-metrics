@@ -5,14 +5,14 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 
-const modules = require('../modules/index');
+const modules = require('../../modules/index');
 
 const iterator = require('./iterator');
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-describe.only('iterator', () => {
+describe('iterator', () => {
 
   let sandbox;
 
@@ -26,6 +26,9 @@ describe.only('iterator', () => {
   
   describe('callModuleWithArgs', () => {
     
+    const resVal = 'yoyo';
+    const moduleName = 'some-module';
+
     let moduleStub;
     let item;
     let promise;
@@ -38,19 +41,23 @@ describe.only('iterator', () => {
       };
 
       promise = new Promise((resolve, reject) => {
-        resolve('yoyo');
+        resolve(resVal);
       });
 
       moduleStub = sandbox.stub(modules, 'fileSize').returns(promise)
-      res = iterator.callModuleWithArgs(modules.fileSize, item);
+      res = iterator.callModuleWithArgs(modules.fileSize, moduleName, item);
     });
 
     it('should call module with correct args', () => {
       sinon.assert.calledWith(moduleStub);
     });
 
-    it.skip('should return a promise', () => {
-      expect(res).to.eventually.equal(true);
+    it('should return a promise', () => {
+      return expect(res).to.eventually.deep.equal({ res: resVal, labels: item.labels, module: moduleName });
     });
+  });
+
+  describe('runThroughModules', () => {
+
   });
 });

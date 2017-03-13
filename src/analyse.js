@@ -1,16 +1,13 @@
-const modules = require('./modules/index');
-const formatter = require('./utils/formatter');
-const configFile = process.env.CONFIG ? process.cwd() + '/' + process.env.CONFIG : '../config.example.json';
-
 const flatten = require('lodash/flatten');
+
+const modules = require('./modules/index');
+const formatter = require('./utils/formatter/formatter');
+const iterator = require('./utils/iterator/iterator');
+const configFile = process.env.CONFIG ? process.cwd() + '/' + process.env.CONFIG : '../config.example.json';
 
 const config = require(configFile);
 
 const moduleKeys = Object.keys(modules);
-
-let result = [];
-
-let promises = [];
 
 const promisesToRun = Object.keys(config).map(k => {
   const module = k;
@@ -20,21 +17,15 @@ const promisesToRun = Object.keys(config).map(k => {
   // console.log('module is', items);
   if(moduleExists) {
     return items.map((v) => {
-      const args = v.args;
-      const labels = v.labels;
-      // console.log('args', args);
-      return modules[module].apply(this, args);
+        return iterator.callModuleWithArgs(modules[module], module, v);
     });
   }
 
 });
 
-console.log(flatten(promisesToRun));
-
 Promise.all(flatten(promisesToRun)).then((vals) => {
   const results = vals.map((v) => {
-    console.log(v);
-    return formatter.toPromethesus(module, v, {});
+    return formatter.toPromethesus(v.module, v.res, v.labels);
   });
   process.stdout.write(results.join("\n") + "\n");
 });
