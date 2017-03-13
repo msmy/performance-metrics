@@ -5,7 +5,7 @@ const gitRevSync = require('git-rev-sync');
 const formatter = require('./formatter');
 
 describe('formatter', () => {
-  describe('addDefaults', () => {
+  describe('addLabels', () => {
 
     const sandbox = sinon.sandbox.create();
 
@@ -21,7 +21,7 @@ describe('formatter', () => {
     });
 
     it('should return custom and default labels', () => {
-      const customLabels = {"type": "css"};
+      const customLabels = {"type": "css", "another": "label"};
 
       const expectedLabels = [
         customLabels,
@@ -32,6 +32,19 @@ describe('formatter', () => {
       ];
       expect(formatter.addLabels(customLabels)).to.deep.equal(expectedLabels);
     })
+  });
+
+  describe('toPromethesus', () => {
+    it('should return a promethesus format', () => {
+      const module = 'some-module';
+      const res = 'some-res';
+      const customLabels = {
+        my: 'cool',
+        amazing: 'labels'
+      };
+      const expectedResult = 'perf_metrics_some-module{my="cool",amazing="labels",branch="add-gzip-metric-to-filesize",app="performance-metrics",team="unknown",domain="nowtv"} some-res';
+      expect(formatter.toPromethesus(module, res, customLabels)).to.equal(expectedResult);
+    });
   });
 });
 
