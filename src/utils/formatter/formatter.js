@@ -1,5 +1,3 @@
-"use strict";
-
 const gitRevSync = require('git-rev-sync');
 
 const app = require(process.cwd() + '/package.json').name;
