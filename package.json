@@ -4,9 +4,14 @@
   "description": "A helper library to determine various performance metrics on front end applications",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./src/modules/**/*.spec.js ./src/utils/**/*.spec.js --recursive",
     "analyse": "node ./src/analyse.js",
-    "analyse:post": "npm run --silent analyse | scripts/post.sh"
+    "analyse:post": "npm run --silent analyse | scripts/post.sh",
+    "check:loggedIn": "if [ \"$(npm whoami)\" = \"msmy\" ] ; then echo \"Logged In\" ; else echo \"You are not logged in to NPM as msmy!\" ; exit 1 ; fi ;",
+    "check:release": "npm test -- --reporter=nyan && npm run check:loggedIn",
+    "release:major": "npm run check:release && npm version major && npm publish",
+    "release:minor": "npm run check:release && npm version minor && npm publish",
+    "release:patch": "npm run check:release && npm version patch && npm publish",
+    "test": "mocha ./src/modules/**/*.spec.js ./src/utils/**/*.spec.js --recursive"
   },
   "author": "Malcolm Smy",
   "license": "MIT",
